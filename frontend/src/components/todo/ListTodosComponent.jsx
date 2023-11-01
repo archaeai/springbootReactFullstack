@@ -1,9 +1,17 @@
 import { useEffect, useState } from "react"
 import { retrieveTodosForUsernameApi,deleteTodoApi } from "./api/TodoApiService"
+import { useAuth } from "./security/AuthContext"
+import { useNavigate } from "react-router"
 
 function ListTodosComponent() {
 
     const today = new Date()
+
+    const authContext = useAuth()
+
+    const username=authContext.username
+
+    const navigate = useNavigate()
     
     const targetDate = new Date(today.getFullYear()+12, today.getMonth(), today.getDay())
 
@@ -15,7 +23,7 @@ function ListTodosComponent() {
     )
 
     function refreshTodos() {
-        retrieveTodosForUsernameApi('in28minutes')
+        retrieveTodosForUsernameApi(username)
         .then(response => {
             setTodos(response.data)
         })
@@ -24,7 +32,7 @@ function ListTodosComponent() {
 
     function deleteTodo(id) {
         console.log("delete todo " + id)
-        deleteTodoApi('in28minutes',id)
+        deleteTodoApi(username,id)
         .then(
             () => {
                 setmessage(`Delete of todo with id ${id} successful`)
@@ -32,8 +40,15 @@ function ListTodosComponent() {
             }
         )
         .catch(error => console.log(error))
-        
+    }
 
+    function updateTodo(id) {
+        console.log("clicked todo " + id)
+        navigate(`/todos/${id}`)
+    }
+
+    function addNewTodo() {
+        navigate(`/todos/-1`)
     }
 
     return (
@@ -48,6 +63,7 @@ function ListTodosComponent() {
                                 <th>Is Done?</th>
                                 <th>Target Date</th>
                                 <th>Delete</th>
+                                <th>Update</th>
                             </tr>
                     </thead>
                     <tbody>
@@ -61,6 +77,8 @@ function ListTodosComponent() {
                                     <td>{todo.targetDate.toString()}</td>
                                     <td><button className="btn btn-warning" 
                                     onClick={() => deleteTodo(todo.id)}>Delete</button></td>
+                                    <td><button className="btn btn-success" 
+                                    onClick={() => updateTodo(todo.id)}>Update</button></td>
                                 </tr>
                             )
                         )
@@ -69,6 +87,7 @@ function ListTodosComponent() {
 
                 </table>
             </div>
+            <div className="btn btn-success m-3" onClick={addNewTodo}>Add New Todo</div>
         </div>
     )
 }
