@@ -29,6 +29,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import com.nimbusds.jose.JOSEException;
@@ -49,10 +50,11 @@ public class JwtSecurityConfig {
 		// https://github.com/spring-projects/spring-security/issues/12310
 		return httpSecurity
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/authenticate").permitAll()
-						//.requestMatchers(PathRequest.toH2Console()).permitAll() // h2-console is a servlet and NOT recommended for a production
-						.requestMatchers(HttpMethod.OPTIONS,"/**")
-						.permitAll()
+						.requestMatchers(
+								new AntPathRequestMatcher("/authenticate"),
+								new AntPathRequestMatcher("/**",HttpMethod.OPTIONS.name()),
+								new AntPathRequestMatcher("/h2-console/**")
+								).permitAll()
 						.anyRequest()
 						.authenticated())
 				.csrf(AbstractHttpConfigurer::disable)

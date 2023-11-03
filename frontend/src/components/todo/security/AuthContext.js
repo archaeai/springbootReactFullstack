@@ -17,36 +17,6 @@ export default function AuthProvider({ children }) {
     const [token,setToken] = useState(null)
 
 
-    // async function login(username, password) {
-    //     const baToken = 'Basic '+ window.btoa(username + ":" +password)
-
-    //     try {
-    //         const response = await executeBasicAuthenticationService(baToken)
-    //         if(response.status==200){
-    //             setAuthenticated(true)
-    //             setusername(username)
-    //             setToken(baToken)
-    //             // 모든 header에 추가하는 코드 
-    //             apiClient.interceptors.request.use(
-    //                 (config) => {
-    //                     console.log('intercepting and add a token')
-    //                     config.headers.Authorization=baToken
-    //                     return config
-    //                 }
-    //             )
-
-
-    //             return true            
-    //         } else {
-    //             logout()
-    //             return false
-    //         }   
-    //     } catch(error){
-    //         logout()
-    //         return false
-    //     }
-    // }
-
     async function login(username, password) {
 
         try {
