@@ -14,6 +14,4 @@ public class SpringSecurityPlayResource {
 	public CsrfToken retrieveCsrfToken(HttpServletRequest request) {
 		return (CsrfToken) request.getAttribute("_csrf");
 	}
-
-
 }
