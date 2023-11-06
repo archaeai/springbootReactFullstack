@@ -8,6 +8,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -30,5 +33,18 @@ public class BasicAuthSecurityConfiguration {
         );
 
         return http.build();
+    }
+    @Bean
+    public UserDetailsService userDetailsService() {
+        var user = User.withUsername("in28minutes")
+                .password("{noop}dummy")
+                .roles("USER")
+                .build();
+// 실제 코드 작성시에는 EUNM을 작성해서 적는 것이 좋다.
+        var admin = User.withUsername("admin")
+                .password("{noop}dummy")
+                .roles("ADMIN")
+                .build();
+        return new InMemoryUserDetailsManager(user,admin);
     }
 }
