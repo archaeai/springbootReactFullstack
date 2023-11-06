@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="b8195f93-72b5-4041-8e4f-c1dbce447735" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../backend/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/target/classes/com/in28minutes/rest/webservices/restfulwebservices/basic/BasicAuthenticationSecurityConfiguration.class" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/target/classes/com/in28minutes/rest/webservices/restfulwebservices/basic/BasicAuthenticationSecurityConfiguration.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/target/classes/com/in28minutes/rest/webservices/restfulwebservices/helloworld/HelloWorldBean.class" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/target/classes/com/in28minutes/rest/webservices/restfulwebservices/helloworld/HelloWorldBean.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/target/classes/com/in28minutes/rest/webservices/restfulwebservices/jwt/JwtSecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/target/classes/com/in28minutes/rest/webservices/restfulwebservices/jwt/JwtSecurityConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/target/classes/com/in28minutes/rest/webservices/restfulwebservices/jwt/JwtTokenRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/target/classes/com/in28minutes/rest/webservices/restfulwebservices/jwt/JwtTokenRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/target/classes/com/in28minutes/rest/webservices/restfulwebservices/jwt/JwtTokenResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/target/classes/com/in28minutes/rest/webservices/restfulwebservices/jwt/JwtTokenResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/target/classes/com/in28minutes/rest/webservices/restfulwebservices/jwt/JwtTokenService.class" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/target/classes/com/in28minutes/rest/webservices/restfulwebservices/jwt/JwtTokenService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/target/classes/com/in28minutes/rest/webservices/restfulwebservices/todo/Todo.class" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/target/classes/com/in28minutes/rest/webservices/restfulwebservices/todo/Todo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/target/classes/com/in28minutes/rest/webservices/restfulwebservices/todo/TodoJpaResource.class" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/target/classes/com/in28minutes/rest/webservices/restfulwebservices/todo/TodoJpaResource.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/target/classes/com/in28minutes/rest/webservices/restfulwebservices/todo/TodoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/target/classes/com/in28minutes/rest/webservices/restfulwebservices/todo/TodoService.class" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 1
+}]]></component>
+  <component name="ProjectId" id="2XkGJyDb1KF2XkxKOjBQtjCAf1I" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b8195f93-72b5-4041-8e4f-c1dbce447735" name="Changes" comment="" />
+      <created>1699165596343</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1699165596343</updated>
+    </task>
+    <servers />
+  </component>
+</project>
