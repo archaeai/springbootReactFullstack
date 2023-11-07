@@ -1,9 +1,6 @@
 package com.minutes.learnspringsecurity.jwt;
 
 import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.KeySourceException;
-import com.nimbusds.jose.jwk.JWK;
-import com.nimbusds.jose.jwk.JWKSelector;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
@@ -32,9 +29,7 @@ import javax.sql.DataSource;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPublicKey;
-import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -78,9 +73,17 @@ public class JwtSecurityConfiguration {
                 .passwordEncoder(str -> passwordEncoder().encode(str))
                 .roles("ADMIN")
                 .build();
+
+        var tom = User.withUsername("tom")
+                //.password("{noop}dummy")
+                .password("dummy")
+                .passwordEncoder(str -> passwordEncoder().encode(str))
+                .roles("TOM")
+                .build();
         var jdbcUserDetailManager = new JdbcUserDetailsManager(dataSource);
         jdbcUserDetailManager.createUser(user);
         jdbcUserDetailManager.createUser(admin);
+        jdbcUserDetailManager.createUser(tom);
         return jdbcUserDetailManager;
     }
 
