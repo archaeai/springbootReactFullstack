@@ -22,7 +22,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -117,7 +119,7 @@ public class JwtSecurityConfiguration {
 
     // decoder step 3 Create JWKSource
     @Bean
-    public JWKSource jwkSource(RSAKey rsaKey) {
+    public JWKSource<SecurityContext> jwkSource(RSAKey rsaKey) {
         var jwkSet = new JWKSet((rsaKey));
         return (jwkSelector,context) ->jwkSelector.select(jwkSet);
     }
@@ -127,6 +129,11 @@ public class JwtSecurityConfiguration {
     public JwtDecoder jwtDecoder(RSAKey rsaKey) throws JOSEException {
         return NimbusJwtDecoder.withPublicKey(rsaKey.toRSAPublicKey())
                 .build();
+    }
+    // encoder
+    @Bean
+    public JwtEncoder jwtEncoder(JWKSource<SecurityContext> jwkSource) {
+        return new NimbusJwtEncoder(jwkSource);
     }
 }
 
