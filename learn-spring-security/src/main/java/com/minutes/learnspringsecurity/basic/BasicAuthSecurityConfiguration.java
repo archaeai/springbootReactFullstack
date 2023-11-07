@@ -24,7 +24,7 @@ import javax.sql.DataSource;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-@Configuration
+//@Configuration
 public class BasicAuthSecurityConfiguration {
 
     @Bean
