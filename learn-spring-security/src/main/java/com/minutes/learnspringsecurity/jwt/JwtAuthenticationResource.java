@@ -36,6 +36,7 @@ public class JwtAuthenticationResource {
 								.expiresAt(Instant.now().plusSeconds(60 * 30))
 								.subject(authentication.getName())
 								.claim("scope",createScope(authentication))
+								//.claim("scope",createScope(authentication))
 								.build();
 		return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 	}
