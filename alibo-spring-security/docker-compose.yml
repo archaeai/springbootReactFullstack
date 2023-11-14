@@ -1,0 +1,12 @@
+services:
+  mysql:
+    image: mysql:8-oracle
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: asd
+      MYSQL_USER: harim
+      MYSQL_PASSWORD: asd
+      MYSQL_DATABASE: jwt_security
+    ports:
+      - "3305:3306"
+    restart: unless-stopped
