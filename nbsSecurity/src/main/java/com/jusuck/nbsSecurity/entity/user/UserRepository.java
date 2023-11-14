@@ -1,4 +1,4 @@
-package com.jusuck.nbsSecurity.uesr;
+package com.jusuck.nbsSecurity.entity.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

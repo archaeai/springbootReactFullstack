@@ -1,6 +1,6 @@
 package com.jusuck.nbsSecurity.config;
 
-import com.jusuck.nbsSecurity.uesr.UserRepository;
+import com.jusuck.nbsSecurity.entity.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
