@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-
+// password 필터전에 jwt 필터 코드
 @Component
 @RequiredArgsConstructor //final 과 @NonNull이 붙은 필드를 자동으로 생성한다.
 public class JwtAuthenticationFilter extends OncePerRequestFilter {

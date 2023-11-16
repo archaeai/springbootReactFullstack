@@ -19,13 +19,13 @@ public class ApplicationConfig {
 
 	private final UserRepository repository;
 
-	@Bean //bean 은 항상 public이다
+	@Bean // 사용자 조회
 	public UserDetailsService userDetailsService() {
 		return username -> repository.findByEmail(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 	}
 
-	@Bean
+	@Bean // UserDetailsService 통해 정보 가져오고, encoder로 비밀번호 인증
 	public AuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 		authProvider.setUserDetailsService(userDetailsService());
@@ -33,12 +33,12 @@ public class ApplicationConfig {
 		return authProvider;
 	}
 
-	@Bean
+	@Bean // 인증 매니저 설정
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
 		return config.getAuthenticationManager();
 	}
 
-	@Bean
+	@Bean //인코더
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
