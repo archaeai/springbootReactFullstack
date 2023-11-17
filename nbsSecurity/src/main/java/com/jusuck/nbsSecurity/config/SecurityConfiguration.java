@@ -1,10 +1,8 @@
 package com.jusuck.nbsSecurity.config;
 
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,9 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import static com.jusuck.nbsSecurity.entity.user.Permission.*;
-import static com.jusuck.nbsSecurity.entity.user.Role.ADMIN;
-import static com.jusuck.nbsSecurity.entity.user.Role.MANAGER;
+
 
 @Configuration
 @EnableWebSecurity
@@ -34,7 +30,8 @@ public class SecurityConfiguration {
 				.csrf()
 				.disable()
 				.authorizeHttpRequests()
-				.requestMatchers("/api/v1/auth/**").hasRole(ADMIN.name())
+				.requestMatchers("/api/v1/auth/**")
+				.permitAll()
 //				.requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
 //				.requestMatchers(HttpMethod.GET,"/api/v1/management/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
 //				.requestMatchers(HttpMethod.POST,"/api/v1/management/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())

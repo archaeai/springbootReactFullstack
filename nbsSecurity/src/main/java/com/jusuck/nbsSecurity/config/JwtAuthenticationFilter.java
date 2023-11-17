@@ -20,11 +20,12 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor //final 과 @NonNull이 붙은 필드를 자동으로 생성한다.
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
 	private final JwtService jwtService;
 	private final UserDetailsService userDetailsService;
 	private final TokenRepository tokenRepository;
 
-@Override
+	@Override
 protected void doFilterInternal(
 		@org.springframework.lang.NonNull HttpServletRequest request,
 		@org.springframework.lang.NonNull HttpServletResponse response,
