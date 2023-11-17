@@ -27,19 +27,6 @@ public class JwtAuthenticationResource {
 
 	@PostMapping("/authenticate")
 	public JwtResponse authenticate(Authentication authentication) {
-		System.out.println(authentication);
-		System.out.println(authentication.getAuthorities());
-		System.out.println(authentication.getName());
-
-		Authentication authentication213 = SecurityContextHolder.getContext().getAuthentication();
-		WebAuthenticationDetails details = (WebAuthenticationDetails) authentication213.getDetails();
-
-		String ip = details.getRemoteAddress();
-		String sessionId = details.getSessionId();
-
-		System.out.println("IP Address: " + ip);
-		System.out.println("Session ID: " + sessionId);
-
 
 		return new JwtResponse(createToken(authentication));
 	}

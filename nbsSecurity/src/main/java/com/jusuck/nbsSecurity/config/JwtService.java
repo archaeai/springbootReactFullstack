@@ -1,23 +1,19 @@
 package com.jusuck.nbsSecurity.config;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
-import java.util.*;
-import java.util.function.Function;
+import java.time.Instant;
 
 @Service
 public class JwtService {
 
-	@Value("${application.security.jwt.secret-key}")
-	private String secretKey;
+	private JwtEncoder jwtEncoder;
 
 	@Value("${application.security.jwt.expiration}")
 	private long jwtExpiration;
@@ -25,70 +21,38 @@ public class JwtService {
 	@Value("${application.security.jwt.refresh-token.expiration}")
 	private long refreshExpiration;
 
-	public String extractUsername(String token) {
-		return extractClaim(token,Claims::getSubject);
+	public String generateToken(Authentication authentication) {
+		return buildToken(authentication,jwtExpiration);
 	}
 
-	public <T> T extractClaim(String token, Function<Claims,T> claimsResolver) {
-		final Claims  claims = extractAllClaims(token);
-		return claimsResolver.apply(claims); // apply 는 java function 인터페이스에서 나오는 것
+	public String generateRefreshToken(Authentication authentication) {
+		return buildToken(authentication,refreshExpiration);
 	}
 
-	public String generateToken(UserDetails userDetails) {
-		return generateToken(new HashMap<>(),userDetails);
+	private String buildToken(Authentication authentication, long expiration) {
+		var claims = JwtClaimsSet.builder()
+				.issuer("self")
+				.issuedAt(Instant.now())
+				.expiresAt(Instant.now().plusMillis(expiration))
+				.subject(authentication.getName())
+				.claim("position",authentication.getAuthorities())
+				.claim("valid",true)
+				.build();
+		// jwtEncoder에서 JWTresourse 를 통해 key sining 함
+		return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 	}
 
-	public String generateToken(
-			Map<String, Object> extraClaims,
-			UserDetails userDetails
-	) {
-		return buildToken(extraClaims,userDetails,jwtExpiration);
+	public boolean isTokenValid(Authentication authentication, UserDetails userDetails) {
+		final String username = authentication.getName();
+		return (username.equals(userDetails.getUsername())) && !(authentication.isAuthenticated());
 	}
 
-	public String generateRefreshToken(
-			UserDetails userDetails
-	) {
-		return buildToken(new HashMap<>(),userDetails,refreshExpiration);
-	}
-
-	private String buildToken(
-			Map<String, Object> extraClaims,
-			UserDetails userDetails,
-			long expiration
-	) {
-		return Jwts.builder()
-				.setClaims(extraClaims)
-				.setSubject(userDetails.getUsername())
-				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + expiration))
-				.signWith(getSignKey(), SignatureAlgorithm.HS256)
-				.compact();
-	}
-
-	public boolean isTokenValid(String token,UserDetails userDetails) {
-		final String username = extractUsername(token);
-		return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
-	}
-// new Date() 기본값이 현재시간이고 before을 통해서 기한이 현재보다 이후이면 false를 반환한다.
-	private boolean isTokenExpired(String token) {
-		return extractExpiration(token).before(new Date());
-	}
-
-	private Date extractExpiration(String token) {
-		return extractClaim(token,Claims::getExpiration);
-	}
-
-	private Claims extractAllClaims(String token) {
-		return Jwts.
-				parserBuilder()
-				.setSigningKey(getSignKey())
-				.build()
-				.parseClaimsJws(token)
-				.getBody();
-	}
-
-	private Key getSignKey() {
-		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-		return Keys.hmacShaKeyFor(keyBytes);
-	}
+//// new Date() 기본값이 현재시간이고 before을 통해서 기한이 현재보다 이후이면 false를 반환한다.
+//	private boolean isTokenExpired( String token) {
+//		return true;
+//	}
 }
+
+
+record JwtResponse(String token){}
+

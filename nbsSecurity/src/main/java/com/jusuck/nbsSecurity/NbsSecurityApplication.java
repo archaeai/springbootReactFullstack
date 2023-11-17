@@ -8,19 +8,15 @@ import com.jusuck.nbsSecurity.entity.menu.Menu;
 import com.jusuck.nbsSecurity.entity.menu.MenuRepository;
 import com.jusuck.nbsSecurity.entity.staff.Staff;
 import com.jusuck.nbsSecurity.entity.staff.StaffRepository;
-import com.jusuck.nbsSecurity.entity.user.Role;
-import com.jusuck.nbsSecurity.entity.user.User;
 import com.jusuck.nbsSecurity.entity.user.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
-import static com.jusuck.nbsSecurity.entity.user.Role.ADMIN;
 
 @SpringBootApplication
 public class NbsSecurityApplication {
@@ -108,10 +104,10 @@ public class NbsSecurityApplication {
 					.lastname("Admin")
 					.email("admin@mail.com")
 					.password("admin")
-					.role(ADMIN)
+					.role("ADMIN")
 					.build();
 
-			System.out.println("Admin token : " + service.register(admin).getAccessToken());
+			service.register(admin);
 
 
 
