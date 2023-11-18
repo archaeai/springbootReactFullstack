@@ -102,7 +102,7 @@ public class NbsSecurityApplication {
 					.firstname("Admin")
 					.lastname("Admin")
 					.email("admin@mail.com")
-					.password("admin")
+					.password("password")
 					.role("ADMIN")
 					.build();
 

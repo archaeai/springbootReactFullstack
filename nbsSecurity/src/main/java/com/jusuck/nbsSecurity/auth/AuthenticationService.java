@@ -27,7 +27,6 @@ public class AuthenticationService {
 	private final TokenRepository tokenRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final JwtService jwtService;
-	private final AuthenticationManager authenticationManager;
 	public AuthenticationResponse register(RegisterRequest request) {
 		Optional<User> existingUser = repository.findByEmail(request.getEmail());
 		if (existingUser.isPresent()) {
@@ -73,12 +72,12 @@ public class AuthenticationService {
 	}
 
 	public AuthenticationResponse authenticate(AuthenticationRequest request) {
-		authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(
-						request.getEmail(),
-						request.getPassword()
-				)
-		);
+//		authenticationManager.authenticate(
+//				new UsernamePasswordAuthenticationToken(
+//						request.getEmail(),
+//						request.getPassword()
+//				)
+//		);
 		var user = repository.findByEmail(request.getEmail())
 				.orElseThrow();
 
@@ -88,6 +87,7 @@ public class AuthenticationService {
 		saveUserToken(user,jwtToken);
 		return AuthenticationResponse.builder()
 				.accessToken(jwtToken)
+				.refreshToken(refreshToken)
 				.build();
 	}
 

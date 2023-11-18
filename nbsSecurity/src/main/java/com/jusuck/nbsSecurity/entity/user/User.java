@@ -35,7 +35,7 @@ public class User implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// 문자열 기반의 role을 처리하는 로직
-		return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + this.role));
+		return Collections.singletonList(new SimpleGrantedAuthority(this.role));
 	}
 
 	@Override
