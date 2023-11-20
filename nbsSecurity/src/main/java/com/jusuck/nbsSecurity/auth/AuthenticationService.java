@@ -9,6 +9,7 @@ import com.jusuck.nbsSecurity.entity.user.UserRepository;
 import com.jusuck.nbsSecurity.exception.EmailAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -67,33 +68,30 @@ public class AuthenticationService {
 				.accessToken(jwtToken)
 				.refreshToken(refreshToken)
 				.build();
-
-
 	}
 
-	public AuthenticationResponse refreshToken(Authentication authentication) throws IOException {
-		final String username;
-		username = authentication.getName();
-		if (username != null) {
-			var user = this.repository.findByUsername(username).orElseThrow();
+	public AuthenticationResponse refreshToken(Authentication authentication) {
+		final String username = authentication.getName();
 
-			// i need some validation here
+		// username이 비어있는 경우 예외 처리
+		if (username.isEmpty()) {
+			throw new IllegalArgumentException("Username is required for refreshing token.");
+		}
 
-			var accessToken = jwtService.generateToken(authentication);
-			var refreshToken = jwtService.generateToken(authentication);
-			revokeAllUserTokens(user);
-			saveUserToken(user, accessToken);
-			var authResponse = AuthenticationResponse.builder()
-					.accessToken(accessToken)
-					.refreshToken(refreshToken)
-					.build();
-			return AuthenticationResponse.builder()
-					.accessToken(accessToken)
-					.refreshToken(refreshToken)
-					.build();
-		}else throw new RuntimeException("유저가 없습니다. 토큰을 확인하세요 이 메시지 필요없도록 필터체인에 validation 추가할 것 "){
+		// 사용자 조회
+		var user = this.repository.findByUsername(username)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
-		};
+		// 토큰 생성
+		var accessToken = jwtService.generateToken(authentication);
+		var refreshToken = jwtService.generateToken(authentication);
+
+		// 응답 반환
+		return AuthenticationResponse.builder()
+				.accessToken(accessToken)
+				.refreshToken(refreshToken)
+				.build();
 	}
+
 }
 

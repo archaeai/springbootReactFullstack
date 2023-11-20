@@ -42,17 +42,17 @@ public class JwtService {
 				.issuedAt(Instant.now())
 				.expiresAt(Instant.now().plusMillis(expiration))
 				.subject(authentication.getName())
-				.claim("scope", createScope(authentication)) // "position" 대신 "scope" 사용, 권한 문자열 리스트로 변환
-				.claim("type", type)
+				.claim("scope", createScope(authentication,type)) // type을 추가해서 access, refresh구분
 				.build();
 
 		return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 	}
 
-	private List<String> createScope(Authentication authentication) {
+	private List<String> createScope(Authentication authentication,String type) {
 		List<String> roles = authentication.getAuthorities().stream()
 				.map(GrantedAuthority::getAuthority)
 				.collect(Collectors.toList());
+		roles.add(type);
 		return roles;
 	}
 

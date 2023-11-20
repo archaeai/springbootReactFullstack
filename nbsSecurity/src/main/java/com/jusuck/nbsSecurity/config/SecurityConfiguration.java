@@ -26,10 +26,12 @@ public class SecurityConfiguration {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf().disable();
+		// 로그인에 기본 인증사용
+		http.authorizeHttpRequests(auth ->
+				auth.requestMatchers("/api/v1/auth/authenticate"))
+						.httpBasic(withDefaults());
 		http.authorizeHttpRequests(auth -> {
 			auth
-					.requestMatchers("/api/v1/auth/**")
-					.permitAll()
 					.anyRequest()
 					.authenticated();
 				});
