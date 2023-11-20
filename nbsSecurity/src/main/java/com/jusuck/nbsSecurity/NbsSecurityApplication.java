@@ -100,7 +100,8 @@ public class NbsSecurityApplication {
 					.build();
 /////////////////////////////////////////////////// boulali user
 			var admin = RegisterRequest.builder()
-					.username("Admin")
+					.userId("Admin")
+					.username("tsm")
 					.email("admin@mail.com")
 					.password("admin")
 					.role("ADMIN")
