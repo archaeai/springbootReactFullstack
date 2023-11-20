@@ -1,5 +1,6 @@
 package com.jusuck.nbsSecurity.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,11 +10,11 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-
+@RequiredArgsConstructor
 @Service
 public class JwtService {
 
-	private JwtEncoder jwtEncoder;
+	private final JwtEncoder jwtEncoder;
 
 	@Value("${application.security.jwt.expiration}")
 	private long jwtExpiration;

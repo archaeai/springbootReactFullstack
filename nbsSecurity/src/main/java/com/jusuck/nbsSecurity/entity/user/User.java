@@ -4,6 +4,7 @@ import com.jusuck.nbsSecurity.entity.token.Token;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -16,8 +17,15 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "_user")
-public class User extends org.springframework.security.core.userdetails.User {
+public class User implements UserDetails {
+
+	@Id
+	@GeneratedValue
+	private Integer id;
+
+	private String username;
 	private String email;
+	private String password;
 
 	private String role; // 문자열로 변경
 
@@ -27,6 +35,27 @@ public class User extends org.springframework.security.core.userdetails.User {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// 문자열 기반의 role을 처리하는 로직
-		return Collections.singletonList(new SimpleGrantedAuthority(this.role));
+		return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + this.role));
 	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+
 }

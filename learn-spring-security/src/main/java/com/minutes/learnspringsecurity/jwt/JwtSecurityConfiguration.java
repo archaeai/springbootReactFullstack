@@ -53,7 +53,7 @@ public class JwtSecurityConfiguration {
                 session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
-        http.httpBasic(withDefaults()); // 팝업창에 로그인 하도록 설정
+        http.httpBasic(withDefaults());
         http.csrf(AbstractHttpConfigurer::disable);
         http.headers(headers ->headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
         //decoder가 없으면, 이 resource server가 받은 jwt토큰을 디코딩하지 못한다.

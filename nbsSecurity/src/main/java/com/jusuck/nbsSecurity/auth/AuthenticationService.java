@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -24,17 +25,16 @@ public class AuthenticationService {
 	private final TokenRepository tokenRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final JwtService jwtService;
-	private final AuthenticationManager authenticationManager;
+
 	public String register(RegisterRequest request) {
-		Optional<User> existingUser = repository.findByEmail(request.getEmail());
+		Optional<User> existingUser = repository.findByUsername(request.getUsername());
 		if (existingUser.isPresent()) {
 			throw new EmailAlreadyExistsException("이미 등록된 이메일입니다.");
 		}
 		var user = User.builder()
-				.firstname(request.getFirstname())
-				.lastname(request.getLastname())
+				.username(request.getUsername())
 				.email(request.getEmail())
-				.password(passwordEncoder.encode(request.getPassword()))
+				.password(passwordEncoder.encode(request.getPassword())) // endcode
 				.role(request.getRole())
 				.build();
 		var savedUser =repository.save(user);
@@ -87,7 +87,7 @@ public class AuthenticationService {
 		final String userEmail;
 		userEmail = authentication.getName();
 		if (userEmail != null) {
-			var user = this.repository.findByEmail(userEmail).orElseThrow();
+			var user = this.repository.findByUsername(userEmail).orElseThrow();
 
 			// i need some validation here
 

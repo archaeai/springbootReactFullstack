@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
+import static org.springframework.security.config.Customizer.withDefaults;
 
 
 @Configuration
@@ -37,6 +38,7 @@ public class SecurityConfiguration {
 						session.sessionCreationPolicy(
 								SessionCreationPolicy.STATELESS
 						));
+		http.httpBasic(withDefaults());
 		http.headers().frameOptions().sameOrigin();
 		http.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 		http.logout(
