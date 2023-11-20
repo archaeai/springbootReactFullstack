@@ -9,7 +9,9 @@ import com.jusuck.nbsSecurity.entity.menu.MenuRepository;
 import com.jusuck.nbsSecurity.entity.staff.Staff;
 import com.jusuck.nbsSecurity.entity.staff.StaffRepository;
 import com.jusuck.nbsSecurity.entity.user.UserRepository;
+
 import lombok.AllArgsConstructor;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,14 +19,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
-
 @SpringBootApplication
 public class NbsSecurityApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(NbsSecurityApplication.class, args);
 	}
-
 
 	// 임시데이터 생성
 
@@ -39,77 +39,74 @@ public class NbsSecurityApplication {
 
 		private final AuthenticationService service;
 
-
 		@Override
 		public void run(String... args) throws Exception {
 			// Staff 객체 생성
 			Staff staff1 = Staff.builder()
-					.userId("admin")
-					.password("admin")
-					.userName("admin")
-					.build();
+				.userId("admin")
+				.password("admin")
+				.userName("admin")
+				.build();
 
 			Staff staff2 = Staff.builder()
-					.userId("manager")
-					.password("manager")
-					.userName("manager")
-					.build();
+				.userId("manager")
+				.password("manager")
+				.userName("manager")
+				.build();
 
 			Staff staff3 = Staff.builder()
-					.userId("user")
-					.password("user")
-					.userName("user")
-					.build();
+				.userId("user")
+				.password("user")
+				.userName("user")
+				.build();
 
 			// AuthGroup 객체 생성
 			AuthGroup authGroup1 = AuthGroup.builder()
-					.authgroupId("group1")
-					.authgroupName("Group One")
-					.build();
+				.authgroupId("group1")
+				.authgroupName("Group One")
+				.build();
 
 			AuthGroup authGroup2 = AuthGroup.builder()
-					.authgroupId("group2")
-					.authgroupName("Group Two")
-					.build();
+				.authgroupId("group2")
+				.authgroupName("Group Two")
+				.build();
 
 			AuthGroup authGroup3 = AuthGroup.builder()
-					.authgroupId("group3")
-					.authgroupName("Group Three")
-					.build();
+				.authgroupId("group3")
+				.authgroupName("Group Three")
+				.build();
 
 			// Menu 객체 생성
 			Menu menu1 = Menu.builder()
-					.menuId("menu1")
-					.menuName("Menu One")
-					.level(1)
-					.isLeaf(true)
-					.build();
+				.menuId("menu1")
+				.menuName("Menu One")
+				.level(1)
+				.isLeaf(true)
+				.build();
 
 			Menu menu2 = Menu.builder()
-					.menuId("menu2")
-					.menuName("Menu Two")
-					.level(1)
-					.isLeaf(true)
-					.build();
+				.menuId("menu2")
+				.menuName("Menu Two")
+				.level(1)
+				.isLeaf(true)
+				.build();
 
 			Menu menu3 = Menu.builder()
-					.menuId("menu3")
-					.menuName("Menu Three")
-					.level(1)
-					.isLeaf(true)
-					.build();
-/////////////////////////////////////////////////// boulali user
+				.menuId("menu3")
+				.menuName("Menu Three")
+				.level(1)
+				.isLeaf(true)
+				.build();
+			/////////////////////////////////////////////////// boulali user
 			var admin = RegisterRequest.builder()
-					.userId("Admin")
-					.username("tsm")
-					.email("admin@mail.com")
-					.password("admin")
-					.role("ADMIN")
-					.build();
+				.userId("Admin")
+				.username("tsm")
+				.email("admin@mail.com")
+				.password("admin")
+				.role("ADMIN")
+				.build();
 
 			service.register(admin);
-
-
 
 			// 데이터베이스에 저장
 			staffRepository.saveAll(Arrays.asList(staff1, staff2, staff3));
@@ -131,7 +128,5 @@ public class NbsSecurityApplication {
 			authGroupRepository.saveAll(Arrays.asList(authGroup1, authGroup2, authGroup3));
 		}
 	}
-
-
 
 }

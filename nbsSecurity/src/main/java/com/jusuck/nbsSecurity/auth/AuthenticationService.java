@@ -7,7 +7,9 @@ import com.jusuck.nbsSecurity.entity.token.TokenType;
 import com.jusuck.nbsSecurity.entity.user.User;
 import com.jusuck.nbsSecurity.entity.user.UserRepository;
 import com.jusuck.nbsSecurity.exception.EmailAlreadyExistsException;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,21 +38,21 @@ public class AuthenticationService {
 		}
 		// 새 사용자 객체를 생성합니다.
 		var user = User.builder()
-				.userId(request.getUserId())
-				.username(request.getUsername())
-				.email(request.getEmail())
-				// 비밀번호를 암호화하여 저장합니다.
-				.password(passwordEncoder.encode(request.getPassword()))
-				.role(request.getRole())
-				.build();
+			.userId(request.getUserId())
+			.username(request.getUsername())
+			.email(request.getEmail())
+			// 비밀번호를 암호화하여 저장합니다.
+			.password(passwordEncoder.encode(request.getPassword()))
+			.role(request.getRole())
+			.build();
 		// 새 사용자 객체를 저장합니다.
 		repository.save(user);
 	}
 
 	// 사용자의 모든 유효한 토큰을 취소하는 메소드입니다.
-	private void revokeAllUserTokens(User user){
+	private void revokeAllUserTokens(User user) {
 		var validUserTokens = tokenRepository.findAllValidTokensByUser(user.getUserId());
-		if(validUserTokens.isEmpty()) {
+		if (validUserTokens.isEmpty()) {
 			return;
 		}
 		validUserTokens.forEach(t -> {
@@ -62,12 +64,12 @@ public class AuthenticationService {
 	// 사용자의 새 토큰을 저장하는 메소드입니다.
 	private void saveUserToken(User user, String jwtToken) {
 		var token = Token.builder()
-				.user(user)
-				.token(jwtToken)
-				.tokenType(TokenType.BEARER)
-				.revoked(false)
-				.expired(false)
-				.build();
+			.user(user)
+			.token(jwtToken)
+			.tokenType(TokenType.BEARER)
+			.revoked(false)
+			.expired(false)
+			.build();
 		tokenRepository.save(token);
 	}
 
@@ -79,9 +81,9 @@ public class AuthenticationService {
 		var refreshToken = jwtService.generateRefreshToken(authentication);
 		// 인증 응답 객체를 생성하고 반환합니다.
 		return AuthenticationResponse.builder()
-				.accessToken(jwtToken)
-				.refreshToken(refreshToken)
-				.build();
+			.accessToken(jwtToken)
+			.refreshToken(refreshToken)
+			.build();
 	}
 
 	// 리프레시 토큰을 통한 인증 토큰 갱신 로직을 처리하는 메소드입니다.
@@ -95,7 +97,7 @@ public class AuthenticationService {
 
 		// 사용자 조회
 		var user = this.repository.findByUserId(username)
-				.orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+			.orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
 		// 새 액세스 토큰 및 리프레시 토큰을 생성합니다.
 		var accessToken = jwtService.generateToken(authentication);
@@ -103,8 +105,8 @@ public class AuthenticationService {
 
 		// 인증 응답 객체를 생성하고 반환합니다.
 		return AuthenticationResponse.builder()
-				.accessToken(accessToken)
-				.refreshToken(refreshToken)
-				.build();
+			.accessToken(accessToken)
+			.refreshToken(refreshToken)
+			.build();
 	}
 }

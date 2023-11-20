@@ -6,7 +6,9 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -46,7 +48,7 @@ public class ApplicationConfig {
 	@Bean
 	public UserDetailsService userDetailsService() {
 		return userId -> repository.findByUserId(userId)
-				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+			.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 	}
 
 	// AuthenticationManager를 정의하는 빈을 생성합니다.
@@ -67,7 +69,7 @@ public class ApplicationConfig {
 
 	// RSA 키 쌍을 생성하는 빈을 정의합니다.
 	@Bean
-	public KeyPair keyPair()  {
+	public KeyPair keyPair() {
 		try {
 			var keyPairGenerator = KeyPairGenerator.getInstance("RSA");
 			keyPairGenerator.initialize(2048);
@@ -80,10 +82,10 @@ public class ApplicationConfig {
 	// RSA 키를 사용하여 RSAKey 객체를 생성하는 빈을 정의합니다.
 	@Bean
 	public RSAKey rsaKey(KeyPair keyPair) {
-		return new RSAKey.Builder((RSAPublicKey) keyPair.getPublic())
-				.privateKey(keyPair.getPrivate())
-				.keyID(UUID.randomUUID().toString())
-				.build();
+		return new RSAKey.Builder((RSAPublicKey)keyPair.getPublic())
+			.privateKey(keyPair.getPrivate())
+			.keyID(UUID.randomUUID().toString())
+			.build();
 	}
 
 	// JWKSource 객체를 생성하는 빈을 정의합니다.
@@ -112,6 +114,6 @@ public class ApplicationConfig {
 	@Bean
 	public AuditorAware<String> auditorProvider() {
 		return () -> Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
-				.map(Authentication::getName);
+			.map(Authentication::getName);
 	}
 }

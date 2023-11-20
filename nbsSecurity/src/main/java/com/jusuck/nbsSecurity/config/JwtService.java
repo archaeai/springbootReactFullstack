@@ -1,6 +1,7 @@
 package com.jusuck.nbsSecurity.config;
 
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,12 +47,12 @@ public class JwtService {
 	// JWT를 구성하고 인코딩하는 메소드입니다.
 	private String buildToken(Authentication authentication, long expiration, String type) {
 		var claims = JwtClaimsSet.builder()
-				.issuer("self") // 토큰 발행자
-				.issuedAt(Instant.now()) // 발행 시간
-				.expiresAt(Instant.now().plusMillis(expiration)) // 만료 시간
-				.subject(authentication.getName()) // 토큰 주체
-				.claim("scope", createScope(authentication, type)) // 'scope' 클레임에 권한과 토큰 타입 추가
-				.build();
+			.issuer("self") // 토큰 발행자
+			.issuedAt(Instant.now()) // 발행 시간
+			.expiresAt(Instant.now().plusMillis(expiration)) // 만료 시간
+			.subject(authentication.getName()) // 토큰 주체
+			.claim("scope", createScope(authentication, type)) // 'scope' 클레임에 권한과 토큰 타입 추가
+			.build();
 
 		return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 	}
@@ -59,8 +60,8 @@ public class JwtService {
 	// 토큰의 'scope' 클레임을 생성하는 메소드입니다.
 	private List<String> createScope(Authentication authentication, String type) {
 		List<String> roles = authentication.getAuthorities().stream()
-				.map(GrantedAuthority::getAuthority)
-				.collect(Collectors.toList());
+			.map(GrantedAuthority::getAuthority)
+			.collect(Collectors.toList());
 		roles.add(type); // 토큰 타입을 'scope' 클레임에 추가
 		return roles;
 	}

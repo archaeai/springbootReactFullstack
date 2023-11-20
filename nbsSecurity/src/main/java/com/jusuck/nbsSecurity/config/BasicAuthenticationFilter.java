@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,7 +30,8 @@ public class BasicAuthenticationFilter extends OncePerRequestFilter {
 	private final PasswordEncoder passwordEncoder;
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+		FilterChain filterChain) throws ServletException, IOException {
 		String path = request.getRequestURI();
 
 		List<String> BasicAuthList = Arrays.asList(BASIC_AUTH_LIST);
@@ -51,7 +53,7 @@ public class BasicAuthenticationFilter extends OncePerRequestFilter {
 
 					if (passwordEncoder.matches(password, userDetails.getPassword())) {
 						UsernamePasswordAuthenticationToken authentication =
-								new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+							new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 						SecurityContextHolder.getContext().setAuthentication(authentication);
 					} else {
 						response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
