@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+//@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/api/v1/demo-controller")
 public class DemoController {
 

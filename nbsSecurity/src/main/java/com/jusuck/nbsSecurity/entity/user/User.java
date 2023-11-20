@@ -7,15 +7,26 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-@Builder //객체의 불변성을 지켜준다. 체이닝메소드를 사용할 수 있다. 필터체인을 생각해보면 된다.
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "_user")
 public class User extends org.springframework.security.core.userdetails.User {
 	private String email;
 
-	public User(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-		super(username, password, authorities);
+	private String role; // 문자열로 변경
+
+	@OneToMany(mappedBy = "user")
+	private List<Token> tokens;
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// 문자열 기반의 role을 처리하는 로직
+		return Collections.singletonList(new SimpleGrantedAuthority(this.role));
 	}
 }

@@ -43,5 +43,10 @@ public class AuthenticationController {
 		service.refreshToken(authentication);
 
 	}
+
+	@GetMapping("/hello")
+	public ResponseEntity<String> hello() {
+		return ResponseEntity.ok("hello");
+	}
 }
 record JwtResponse(String token){}
