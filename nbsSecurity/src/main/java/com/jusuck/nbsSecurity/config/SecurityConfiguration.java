@@ -12,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 
@@ -25,6 +27,25 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfiguration {
 	// 로그아웃 핸들러를 주입합니다.
 	private final LogoutHandler logoutHandler;
+	private final BasicAuthenticationFilter basicAuthenticationFilter;
+	private static final String[] WHITE_LIST_URL = {
+			"/api/v1/auth/authenticate",
+			"/v2/api-docs",
+			"/v3/api-docs",
+			"/v3/api-docs/**",
+			"/swagger-resources",
+			"/swagger-resources/**",
+			"/configuration/ui",
+			"/configuration/security",
+			"/swagger-ui/**",
+			"/webjars/**",
+			"/swagger-ui.html"};
+
+	static  final String[] BASIC_AUTH_LIST = {
+			"/api/v1/auth/authenticate"
+	};
+
+
 
 	// HTTP 보안을 구성하는 빈을 정의합니다.
 	@Bean
@@ -32,16 +53,20 @@ public class SecurityConfiguration {
 		// CSRF 보호 기능을 비활성화합니다.
 		http.csrf().disable();
 
-		// 특정 경로에 대한 HTTP Basic 인증을 설정합니다.
-		// 여기서는 '/api/v1/auth/authenticate' 경로에 대해 HTTP Basic 인증을 사용합니다.
-		http.authorizeHttpRequests(auth ->
-						auth.requestMatchers("/api/v1/auth/authenticate"))
-				.httpBasic(withDefaults());
 
-		// 나머지 모든 요청에 대해 인증을 요구합니다.
-		http.authorizeHttpRequests(auth -> {
-			auth.anyRequest().authenticated();
-		});
+
+		http.authorizeHttpRequests(auth ->
+				auth
+						.requestMatchers(BASIC_AUTH_LIST)
+						.permitAll()
+						.requestMatchers(WHITE_LIST_URL)
+						.permitAll()
+						.anyRequest().authenticated()
+		);
+		http.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+		http.addFilterBefore(basicAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+
 
 		// 세션 정책을 STATELESS로 설정하여 세션을 사용하지 않도록 합니다.
 		http.sessionManagement()
@@ -51,7 +76,8 @@ public class SecurityConfiguration {
 		http.headers().frameOptions().sameOrigin();
 
 		// OAuth2 리소스 서버를 JWT로 구성합니다.
-		http.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+
+
 
 		// 로그아웃 구성을 설정합니다.
 		http.logout(logout -> {

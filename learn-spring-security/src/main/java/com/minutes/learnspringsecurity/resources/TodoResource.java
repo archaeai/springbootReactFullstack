@@ -22,20 +22,6 @@ public class TodoResource {
 	//@PreAuthorize("hasAuthority('[SCOPE_ROLE_USER]') ")
 	@GetMapping("/todos")
 	public List<Todo> retrieveAllTodos(Authentication authentication) {
-		System.out.println(authentication.getName());
-		System.out.println(authentication.getAuthorities());
-		Object principal =authentication.getPrincipal();
-
-		if (principal instanceof Jwt) {
-			Jwt jwt = (Jwt) principal;
-			// 모든 클레임을 가져옵니다.
-			Map<String, Object> claims = jwt.getClaims();
-			// 콘솔에 모든 클레임 출력
-			System.out.println(claims);
-			// 특정 클레임을 가져옵니다. 예: 'sub' 클레임 (주로 사용자 ID에 해당)
-			String subject = jwt.getClaim("sub");
-			System.out.println("Subject: " + subject);
-		}
 
 		return TODO_LIST;
 	}
