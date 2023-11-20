@@ -8,11 +8,8 @@ import com.jusuck.nbsSecurity.entity.user.User;
 import com.jusuck.nbsSecurity.entity.user.UserRepository;
 import com.jusuck.nbsSecurity.exception.EmailAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -26,7 +23,7 @@ public class AuthenticationService {
 	private final PasswordEncoder passwordEncoder;
 	private final JwtService jwtService;
 
-	public String register(RegisterRequest request) {
+	public void register(RegisterRequest request) {
 		Optional<User> existingUser = repository.findByUsername(request.getUsername());
 		if (existingUser.isPresent()) {
 			throw new EmailAlreadyExistsException("이미 등록된 이메일입니다.");
@@ -34,11 +31,10 @@ public class AuthenticationService {
 		var user = User.builder()
 				.username(request.getUsername())
 				.email(request.getEmail())
-				.password(passwordEncoder.encode(request.getPassword())) // endcode
+				.password(passwordEncoder.encode(request.getPassword()))
 				.role(request.getRole())
 				.build();
-		var savedUser =repository.save(user);
-		return "계정등록에 성공하셨습니다";
+		repository.save(user);
 	}
 
 	private void revokeAllUserTokens(User user){
@@ -63,31 +59,23 @@ public class AuthenticationService {
 		tokenRepository.save(token);
 	}
 
-	public String authenticate(Authentication authentication) {
-//		authenticationManager.authenticate(
-//				new UsernamePasswordAuthenticationToken(
-//						authentication.getName(),
-//						authentication.getCredentials()
-//				)
-//		);
-//		var user = repository.findByEmail(authentication.getName())
-//				.orElseThrow();
+	public AuthenticationResponse authenticate(Authentication authentication) {
 
 		var jwtToken = jwtService.generateToken(authentication);
 		var refreshToken = jwtService.generateRefreshToken(authentication);
-//		return AuthenticationResponse.builder()
-//				.accessToken(jwtToken)
-//				.refreshToken(refreshToken)
-//				.build();
-		return jwtToken;
+		return AuthenticationResponse.builder()
+				.accessToken(jwtToken)
+				.refreshToken(refreshToken)
+				.build();
+
 
 	}
 
 	public AuthenticationResponse refreshToken(Authentication authentication) throws IOException {
-		final String userEmail;
-		userEmail = authentication.getName();
-		if (userEmail != null) {
-			var user = this.repository.findByUsername(userEmail).orElseThrow();
+		final String username;
+		username = authentication.getName();
+		if (username != null) {
+			var user = this.repository.findByUsername(username).orElseThrow();
 
 			// i need some validation here
 

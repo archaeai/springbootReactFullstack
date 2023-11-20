@@ -8,8 +8,12 @@ import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class JwtService {
@@ -21,39 +25,41 @@ public class JwtService {
 
 	@Value("${application.security.jwt.refresh-token.expiration}")
 	private long refreshExpiration;
-
+// 액세스토큰 생성
 	public String generateToken(Authentication authentication) {
-		return buildToken(authentication,jwtExpiration);
+		String type = "access";
+		return buildToken(authentication,jwtExpiration,type);
 	}
-
+// 리프레쉬토큰 생성
 	public String generateRefreshToken(Authentication authentication) {
-		return buildToken(authentication,refreshExpiration);
+		String type = "refresh";
+		return buildToken(authentication,refreshExpiration,type);
 	}
 
-	private String buildToken(Authentication authentication, long expiration) {
+	private String buildToken(Authentication authentication, long expiration, String type) {
 		var claims = JwtClaimsSet.builder()
 				.issuer("self")
 				.issuedAt(Instant.now())
 				.expiresAt(Instant.now().plusMillis(expiration))
 				.subject(authentication.getName())
-				.claim("position",authentication.getAuthorities())
-				.claim("valid",true)
+				.claim("scope", createScope(authentication)) // "position" 대신 "scope" 사용, 권한 문자열 리스트로 변환
+				.claim("type", type)
 				.build();
-		// jwtEncoder에서 JWTresourse 를 통해 key sining 함
+
 		return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 	}
+
+	private List<String> createScope(Authentication authentication) {
+		List<String> roles = authentication.getAuthorities().stream()
+				.map(GrantedAuthority::getAuthority)
+				.collect(Collectors.toList());
+		return roles;
+	}
+
 
 	public boolean isTokenValid(Authentication authentication, UserDetails userDetails) {
 		final String username = authentication.getName();
 		return (username.equals(userDetails.getUsername())) && !(authentication.isAuthenticated());
 	}
-
-//// new Date() 기본값이 현재시간이고 before을 통해서 기한이 현재보다 이후이면 false를 반환한다.
-//	private boolean isTokenExpired( String token) {
-//		return true;
-//	}
 }
-
-
-record JwtResponse(String token){}
 

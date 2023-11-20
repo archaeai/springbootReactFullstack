@@ -16,21 +16,13 @@ public class AuthenticationController {
 
 	private final AuthenticationService service;
 	@PostMapping("/register")
-	public ResponseEntity<String> register(
+	public void register(
 			@RequestBody RegisterRequest request
-	) {
-		return ResponseEntity.ok(service.register(request));
-	}
+	) {}
 
 	@PostMapping("/authenticate")
-	public JwtResponse authenticate(Authentication authentication) {
-		System.out.println(authentication.getName());
-		System.out.println("zzzzzzzzzzzzzzzzzzzzzz");
-		System.out.println(authentication.getName());
-		System.out.println(authentication.getName());
-		System.out.println(authentication.getName());
-		return new JwtResponse(service.authenticate(authentication));
-
+	public ResponseEntity<AuthenticationResponse> authenticate(Authentication authentication) {
+		return ResponseEntity.ok(service.authenticate(authentication));
 	}
 
 	@PostMapping("/refresh-token")
@@ -41,9 +33,4 @@ public class AuthenticationController {
 
 	}
 
-	@GetMapping("/hello")
-	public ResponseEntity<String> hello() {
-		return ResponseEntity.ok("hello");
-	}
 }
-record JwtResponse(String token){}
