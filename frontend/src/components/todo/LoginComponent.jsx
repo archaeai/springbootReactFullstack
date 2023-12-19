@@ -6,7 +6,7 @@ function LoginComponent() {
 
     const [username, setUsername] = useState('in28minutes')
 
-    const [password, setPassword] = useState('')
+    const [password, setPassword] = useState('asd')
 
     const [showErrorMessage, setShowErrorMessage] = useState(false)
 
